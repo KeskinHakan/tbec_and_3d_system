@@ -1,0 +1,12 @@
+pandas==1.2.4
+geopy==2.2.0
+numpy==1.20.1
+pydeck==0.7.0
+streamlit==1.5.1
+matplotlib==3.3.4
+openseespy==3.3.0.1.1
+Pillow==8.4.0
+openpyxl == 3.0.7
+xlrd<2.0
+pip == 21.3.1
+geopy==2.2.0
