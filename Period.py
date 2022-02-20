@@ -30,7 +30,7 @@ from geopy.geocoders import Nominatim
 # Initialize Nominatim API
 geolocator = Nominatim(user_agent="geoapiExercises")
 
-st.title("Turkish Building Seismic Code (TBEC) - Calculation App")
+st.title("Design and Elastic Spectrum Calculation (TBEC 2018)")
 
 design_type = st.sidebar.selectbox("Design Type: ", {"Linear Design", "Nonlinear Design"})
 
@@ -56,6 +56,18 @@ if design_type == "Linear Design":
         6- Soil Type
         7- Fundamental period of the structure that you want to find exact
             SaR and SaE values.
+    
+    New Features: 
+        
+        1- SAP2000 model can be imported to this app as a .xlsx file.
+        2- Imported file will be re-modelled with OpenSeesPy
+        3- Structural design will be performed with elastic section
+        4- Three period values can be seen in the app to calculate design and elastic 
+        acceleration with "From Analysis" selection.
+        5- Elastic and Design spectrum plot data can be downloaded with one click!
+        6- 3D model and Joints can be seen on the App as image.
+        7- Displacement check section removed to be updated in the future.
+       
             
     To find the more information about these parameters please check the TBEC 2018
     Chapter 2, 3 & 4. You can download the TBEC 2018 in Turkish format at the following
