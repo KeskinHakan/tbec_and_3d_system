@@ -1132,46 +1132,46 @@ if design_type == "Linear Design":
         
         # Displacement Kontrol
         
-        """
-        Displacement Limit and Control
+        # """
+        # Displacement Limit and Control
         
-        """
+        # """
         
-        number_of_story = st.number_input("Number of Story - N: ",value=1, step=1)
-        height = st.number_input("Total Height of the Structure - H: ",value=3, step=1)
-        delta_i = st.number_input("Maximum Inelastic Displacement under the Earthquake: ",value=0.01, step=0.01)
+        # number_of_story = st.number_input("Number of Story - N: ",value=1, step=1)
+        # height = st.number_input("Total Height of the Structure - H: ",value=3, step=1)
+        # delta_i = st.number_input("Maximum Inelastic Displacement under the Earthquake: ",value=0.01, step=0.01)
         
-        if structure_type == "Steel":
-            kappa = 0.5
-        elif structure_type == "Concrete":
-            kappa = 1.0
-        lambda_disp = Sae_DD3/Sae
-        delta_design = R*delta_i/I
-        delta_max = delta_design
-        ratio_ = lambda_disp*(delta_max/height)
+        # if structure_type == "Steel":
+        #     kappa = 0.5
+        # elif structure_type == "Concrete":
+        #     kappa = 1.0
+        # lambda_disp = Sae_DD3/Sae
+        # delta_design = R*delta_i/I
+        # delta_max = delta_design
+        # ratio_ = lambda_disp*(delta_max/height)
         
-        wall_contact = st.selectbox("Wall Contact: ", {"Rigid","Flexible"})
+        # wall_contact = st.selectbox("Wall Contact: ", {"Rigid","Flexible"})
         
         
-        if wall_contact == "Rigid":
-            if number_of_story == 1 and structure_type == "Steel":
-                limit_ratio = 0.008*kappa*1.5
-            elif number_of_story == 1 and structure_type == "Concrete":
-                limit_ratio = 0.008*kappa
-        elif wall_contact == "Flexible":
-            if number_of_story != 1 and structure_type == "Steel":
-                limit_ratio = 0.016*kappa*1.5
-            elif number_of_story != 1 and structure_type == "Concrete":
-                limit_ratio = 0.016*kappa
+        # if wall_contact == "Rigid":
+        #     if number_of_story == 1 and structure_type == "Steel":
+        #         limit_ratio = 0.008*kappa*1.5
+        #     elif number_of_story == 1 and structure_type == "Concrete":
+        #         limit_ratio = 0.008*kappa
+        # elif wall_contact == "Flexible":
+        #     if number_of_story != 1 and structure_type == "Steel":
+        #         limit_ratio = 0.016*kappa*1.5
+        #     elif number_of_story != 1 and structure_type == "Concrete":
+        #         limit_ratio = 0.016*kappa
         
-        if limit_ratio < ratio_ :
-            st.info("Displacement Ratio: " + str(format(ratio_ , ".3f")))
-            st.info("Displacement Limit Ratio: " + str(limit_ratio))
-            st.success("Displacement Check: NOT OK!")
-        elif limit_ratio > ratio_ :
-            st.info("Displacement Ratio: " + str(format(ratio_ , ".3f")))
-            st.info("Displacement Limit Ratio: " + str(limit_ratio))
-            st.success("Displacement Check: OK!")
+        # if limit_ratio < ratio_ :
+        #     st.info("Displacement Ratio: " + str(format(ratio_ , ".3f")))
+        #     st.info("Displacement Limit Ratio: " + str(limit_ratio))
+        #     st.success("Displacement Check: NOT OK!")
+        # elif limit_ratio > ratio_ :
+        #     st.info("Displacement Ratio: " + str(format(ratio_ , ".3f")))
+        #     st.info("Displacement Limit Ratio: " + str(limit_ratio))
+        #     st.success("Displacement Check: OK!")
         
         hide_menu_style = """
                 <style>
