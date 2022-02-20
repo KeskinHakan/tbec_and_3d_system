@@ -32,7 +32,7 @@ geolocator = Nominatim(user_agent="geoapiExercises")
 
 st.title("Turkish Building Seismic Code (TBEC) - Calculation App")
 
-design_type = st.sidebar.selectbox("Design Type: ", {"Nonlinear Design", "Elastic Design"})
+design_type = st.sidebar.selectbox("Design Type: ", {"Elastic Design", "Elastic Design"})
 
 def design_choice():
     return design_type
@@ -41,7 +41,7 @@ if design_type == "Elastic Design":
     switch = 3
     st.warning("You need to upload a csv or excel file.")
     main_file_name = st.file_uploader("Choose a file")
-    
+    # main_file_name = "Output.xlsx"
     """
     This application was developed to find out design (SaR) and elastic spectral acceleration (SaE) of the structure
     that located in Turkey. 
@@ -78,7 +78,8 @@ if design_type == "Elastic Design":
         assembled_joint_masses = 'Assembled Joint Masses' # change it to your sheet name
         connectivity_frame = "Connectivity - Frame"
         joint_coordinates = "Joint Coordinates"
-            
+        material_concrete_1 = "Material List 1 - By Obj Type"
+        material_concrete_2 = "MatProp 02 - Basic Mech Props"    
         
         # main_file_name = st.file_uploader("Choose a file")
         df_joint_mass = read_excel(main_file_name, sheet_name = assembled_joint_masses)
@@ -88,22 +89,9 @@ if design_type == "Elastic Design":
         df_frame_section = read_excel(main_file_name, sheet_name = frame_section)
         df_section_properties = read_excel(main_file_name, sheet_name = section_properties)
         df_section_rebar = read_excel(main_file_name, sheet_name = section_rebar)
-        
-
-        
-        # main_file_name = '3D_Example_Deneme.xlsx' # change it to the name of your excel file
-        
-        # # df_main = read_excel(main_file_name, sheet_name = my_sheet_main, engine='openpyxl')
-        # df_joint_mass = read_excel(main_file_name, sheet_name = assembled_joint_masses)
-        # df_joint = read_excel(main_file_name, sheet_name = joint_coordinates)
-        # df_frame = read_excel(main_file_name, sheet_name = connectivity_frame)
-        # df_restrain = read_excel(main_file_name, sheet_name = restrained)
-        # df_frame_section = read_excel(main_file_name, sheet_name = frame_section)
-        # df_section_properties = read_excel(main_file_name, sheet_name = section_properties)
-        # df_section_rebar = read_excel(main_file_name, sheet_name = section_rebar)
-        # # print(df_main.head()) # shows headers with top 5 rows
-        # # print(df_main.info())
-        
+        df_material_concrete_1 = read_excel(main_file_name, sheet_name = material_concrete_1)
+        df_material_concrete_2 = read_excel(main_file_name, sheet_name = material_concrete_2)
+         
         df_section_rebar.columns = df_section_rebar.iloc[0] 
         df_section_rebar = df_section_rebar[2:]
         df_section_rebar.reset_index(inplace = True, drop = True)
@@ -111,12 +99,33 @@ if design_type == "Elastic Design":
         long_dia = df_section_rebar["BarSizeL"]
         len_long_dia = len(long_dia)
         long_diameter = []
-        
+
         stirrup_dia = df_section_rebar["BarSizeC"]
         
         df_frame.columns = df_frame.iloc[0] 
         df_frame = df_frame[2:]
         df_frame.reset_index(inplace = True, drop = True)
+        
+        df_material_concrete_1.columns = df_material_concrete_1.iloc[0] 
+        df_material_concrete_1 = df_material_concrete_1[2:]
+        df_material_concrete_1.reset_index(inplace = True, drop = True)
+        
+        concrete_material = df_material_concrete_1["Material"]
+        
+        df_material_concrete_2.columns = df_material_concrete_2.iloc[0] 
+        df_material_concrete_2 = df_material_concrete_2[2:]
+        df_material_concrete_2.reset_index(inplace = True, drop = True)
+        
+        material = df_material_concrete_2["Material"]
+        E1 = df_material_concrete_2["E1"]
+        len_E1 = len(E1)
+        k = 1
+        while k <= len_E1:
+            if concrete_material.iloc[0] == material.iloc[k-1] :
+                young_modulus = E1.iloc[k-1]
+
+                
+            k = k+1
         
         df_restrain.columns = df_restrain.iloc[0] 
         df_restrain = df_restrain[2:]
@@ -204,7 +213,7 @@ if design_type == "Elastic Design":
         fy = 4200000           #Fluencia del acero
         Es = 200000000.0      #Módulo de elasticidad del acero
         fc = 20000 # kg/cm2             #Resistencia a la compresión del concreto
-        E  = 28000000  #Módulo de elasticidad del concreto
+        E  = young_modulus  #Módulo de elasticidad del concreto
         G  = 0.5*E/(1+0.2)            #Módulo de corte del concreto
         
         cover = 0.04                  #Recubrimiento de vigas y columnas
@@ -338,8 +347,8 @@ if design_type == "Elastic Design":
         
             joint1 = joint_I[startFrameIndex]
             joint2 = joint_J[startFrameIndex]
-            jointI_index = df_joint["Joint"].tolist().index(joint_I[startFrameIndex])
-            jointJ_index = df_joint["Joint"].tolist().index(joint_J[startFrameIndex])
+            jointI_index = df_joint["Joint"].tolist().index(int(joint_I[startFrameIndex]))
+            jointJ_index = df_joint["Joint"].tolist().index(int(joint_J[startFrameIndex]))
             z_coordinate_I = z_coor[jointI_index+1]
             z_coordinate_J = z_coor[jointJ_index+1]
             y_coordinate_I = y_coor[jointI_index+1]
