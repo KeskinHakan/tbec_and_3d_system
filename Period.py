@@ -32,12 +32,12 @@ geolocator = Nominatim(user_agent="geoapiExercises")
 
 st.title("Turkish Building Seismic Code (TBEC) - Calculation App")
 
-design_type = st.sidebar.selectbox("Design Type: ", {"Elastic Design", "Elastic Design"})
+design_type = st.sidebar.selectbox("Design Type: ", {"Linear Design", "Nonlinear Design"})
 
 def design_choice():
     return design_type
 
-if design_type == "Elastic Design":
+if design_type == "Linear Design":
     switch = 3
     st.warning("You need to upload a csv or excel file.")
     main_file_name = st.file_uploader("Choose a file")
